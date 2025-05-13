@@ -45,12 +45,12 @@ jobs:
       - name: 7z Compress
         id: zip
         run: |
-          echo zip-file-name=abc123 >> "%GITHUB_OUTPUT%"
-          echo ${{ steps.zip.outputs.zip-file-name }}
+          echo "zip-file-name=abc123" >> "%GITHUB_OUTPUT%"
+      - run: echo ${{ steps.zip.outputs.zip-file-name }}
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.zip.outputs.zip-file-name }}
           tag_name: qt%QTVER%
-          body: 'Statically linked Qt%QTVER%'
+          body: Statically linked Qt%QTVER%
           target_commitish: workflow-5.15.16
