@@ -6,7 +6,6 @@ IF exist %SSLINSTALLDIR% (
 ) ELSE (
     echo Could not find OpenSSL in %SSLINSTALLDIR%
     echo use "qt.bat openssl" to install it.
-    pause
     exit /b 1
 )
 
@@ -14,7 +13,6 @@ IF exist %QTDIR% (
     cd %QTDIR%
 ) ELSE ( 
     echo Could not find Qt sources in %QTDIR%
-    pause
     exit /b 1
 )
 
@@ -24,7 +22,7 @@ IF exist %QTBUILDDIR% (
 )
 
 md %QTBUILDDIR%
-cd %QTBUILDDIR%  ||  pause ^&^& exit /b 1
+cd %QTBUILDDIR%  ||  exit /b 1
 
 echo Configuring Qt...
 call %QTDIR%\configure.bat -prefix "%QTINSTALLDIR%" -platform %PLATFORM% ^
@@ -33,15 +31,11 @@ call %QTDIR%\configure.bat -prefix "%QTINSTALLDIR%" -platform %PLATFORM% ^
 %EXTRABUILDOPTIONS% ^
 -openssl-linked OPENSSL_PREFIX=%SSLINSTALLDIR%
 IF %errorlevel% NEQ 0 (
-    pause
     exit /b 1
 )
 
 echo Configuration complete
 echo Will install to %QTINSTALLDIR%
-
-pause
-exit
 
 endlocal
 

@@ -1,0 +1,48 @@
+name: Build
+
+on:
+  push:
+    branches: [ workflow-5.15.16 ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    env:
+      SET_VC_VARS: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64"'
+
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: workflow-5.15.16
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '2.7.18'
+      - run: |
+          %SET_VC_VARS%
+          md C:\Qt
+          qt download
+          qt openssl
+          qt setup
+          qt build
+      - id: zip
+        run: |
+          tools\options
+          7z a \
+          -mx \
+          -m0=LZMA2 \
+          -ms=on \
+          -mmt=on \
+          msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z \
+          %PREFIX%\%QTVER%\
+          echo "zip-file-path=%CD%\msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.zip.outputs.zip-file-path }}
+          tag_name: qt5.15.16
+          body: 'Statically linked Qt5.15.16'
+          target_commitish: workflow-5.15.16

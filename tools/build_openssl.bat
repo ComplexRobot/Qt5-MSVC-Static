@@ -26,7 +26,6 @@ IF exist %SSLINSTALLDIR% (
             echo Building / Installing OpenSSL...
             call nmake install_sw
             IF %errorlevel% NEQ 0 (
-                pause
                 exit /b 1
             )
 
@@ -39,14 +38,12 @@ IF exist %SSLINSTALLDIR% (
             echo Building OpenSSL...
             call nmake -f ms\nt.mak clean all
             IF %errorlevel% NEQ 0 (
-                pause
                 exit /b 1
             )
 
             echo Installing OpenSSL...
             call nmake -f ms\nt.mak install
             IF %errorlevel% NEQ 0 (
-                pause
                 exit /b 1
             )
 
@@ -55,12 +52,10 @@ IF exist %SSLINSTALLDIR% (
     ) ELSE (
 
         echo Could not find OpenSSL sources in %SSLBUILDDIR%
-        pause
         exit /b 1
     )
 )
 
-pause
 exit
 
 endlocal
