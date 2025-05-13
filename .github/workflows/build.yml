@@ -45,8 +45,8 @@ jobs:
       - name: 7z Compress
         id: zip
         run: |
-          echo "zip-file-name=abc123" >> "%GITHUB_OUTPUT%"
-          echo ${{ steps.zip.outputs.zip-file-name }}
+          echo "zip_file_name=abc123" >> "%GITHUB_OUTPUT%"
+          echo ${{ steps.zip.outputs.zip_file_name }}
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
