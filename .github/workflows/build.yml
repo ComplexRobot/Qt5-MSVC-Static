@@ -35,11 +35,11 @@ jobs:
           call "%SET_VC_VARS%"
           call "${{ github.event.repository.name }}\tools\options"
           7z a -mx -m0=LZMA2 -ms=on -mmt=on msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z %PREFIX%\%QTVER%\
-          echo "zip-file-path=%CD%\msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
+          echo "zip-file-name=msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ steps.zip.outputs.zip-file-path }}
+          files: ${{ steps.zip.outputs.zip-file-name }}
           tag_name: qt5.15.16
           body: 'Statically linked Qt5.15.16'
           target_commitish: workflow-5.15.16
