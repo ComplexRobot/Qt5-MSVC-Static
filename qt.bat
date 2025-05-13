@@ -6,20 +6,20 @@ call tools\options.bat
 IF NOT "%1"=="" (
 
     IF "%1"=="download" (
-        call tools\download.bat
+        start "qt download" /W /BELOWNORMAL tools\download.bat
     )
     IF "%1"=="setup" (
-        call tools\setup_qt.bat
+        start "qt setup" /W /BELOWNORMAL tools\setup_qt.bat
     )
     IF "%1"=="build" (
-        call tools\build_qt.bat
+        start "qt build" /W /BELOWNORMAL tools\build_qt.bat
     )
     IF "%1"=="openssl" (
-        call tools\build_openssl.bat
+        start "qt openssl" /W /BELOWNORMAL tools\build_openssl.bat
     )
     IF "%1"=="extra" (
         set EXTNAME=%2
-        call tools\build_qt_extras.bat
+        start "qt extra %2" /W /BELOWNORMAL tools\build_qt_extras.bat
     )
 
 ) ELSE (

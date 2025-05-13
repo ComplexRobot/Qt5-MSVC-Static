@@ -9,33 +9,45 @@ IF NOT "%EXTNAME%" == "" (
     echo PATH: %EXTPATH%
     echo QMAKE: %QMAKE%
 
-    set URL=http://download.qt.io/%QTRELEASE%_releases/qt/%QTVER:~0,-2%/%QTVER%/submodules/%EXTNAME%-everywhere-src-%QTVER%.zip
+    set URL=http://download.qt.io/%QTRELEASE%_releases/qt/%QTVER:~0,-3%/%QTVER%/submodules/%EXTNAME%-everywhere-opensource-src-%QTVER%.zip
 
     cd %SRCDIR%
     echo Downloading !URL!
     curl %CURLOPTS% !URL!
 
     rd %EXTPATH% /s /q
-    7z %ZOPTS% %EXTNAME%-everywhere-src-%QTVER%.zip || exit /b %errorlevel%
+    7z %ZOPTS% %EXTNAME%-everywhere-opensource-src-%QTVER%.zip || pause ^&^& exit /b 1
     cd ..
 
-    cd %EXTPATH% ||  exit /b %errorlevel%
+    cd %EXTPATH% ||  pause ^&^& exit /b 1
 
     echo Configuring %EXTNAME%...
-    start /W "Configuring %EXTNAME%" %QMAKE% || exit /b %errorlevel%
-    IF %errorlevel% NEQ 0 exit /b %errorlevel%
+    call %QMAKE% || pause ^&^& exit /b 1
+    IF %errorlevel% NEQ 0 (
+        pause
+        exit /b 1
+    )
 
     echo Building %EXTNAME%...
-    start /W /BELOWNORMAL "Building %EXTNAME%..." jom clean all
-    IF %errorlevel% NEQ 0 exit /b %errorlevel%
+    call jom clean all
+    IF %errorlevel% NEQ 0 (
+        pause
+        exit /b 1
+    )
 
     echo Installing %EXTNAME%...
-    start /W /BELOWNORMAL "Installing %EXTNAME%..." jom install
-    IF %errorlevel% NEQ 0 exit /b %errorlevel%
+    call jom install
+    IF %errorlevel% NEQ 0 (
+        pause
+        exit /b 1
+    )
 
     echo %EXTNAME% installed
 ) ELSE (
     echo Missing extension name!
 )
+
+pause
+exit
 
 endlocal

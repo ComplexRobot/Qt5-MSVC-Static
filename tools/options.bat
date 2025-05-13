@@ -1,12 +1,12 @@
 @echo off
 
 
-set MSVCVER=2019
-set QTVER=5.15.2
+set MSVCVER=2022
+set QTVER=5.15.16
 set SSLVER=1.1.1k
-set PREFIX=C:\Qt
-set EXTRABUILDOPTIONS=-qt-sqlite
-set PATH=C:\Python\;C:\Python27\;C:\Strawberry\perl\bin;%PATH%
+set PREFIX=D:\Qt
+set EXTRABUILDOPTIONS=-qt-sqlite -c++std c++2b -pch -ltcg -qt-doubleconversion -qt-freetype -qt-harfbuzz -gui -widgets
+set PATH=C:\Python\;C:\Python27\;D:\Strawberry\perl\bin;%PATH%
 
 
 REM DO NOT EDIT BELOW THIS LINE
@@ -20,7 +20,7 @@ set QTINSTALLDIR=%PREFIX%\%QTVER%\msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static
 set QTRELEASE=official
 for %%A in (alpha beta rc) DO (echo.%QTVER% | find /I "%%A">Nul && set QTRELEASE=development)
 
-set QTURL=http://download.qt.io/%QTRELEASE%_releases/qt/%QTVER:~0,-2%/%QTVER%/submodules/qtbase-everywhere-src-%QTVER%.zip
+set QTURL=http://download.qt.io/%QTRELEASE%_releases/qt/%QTVER:~0,-3%/%QTVER%/submodules/qtbase-everywhere-opensource-src-%QTVER%.zip
 set QTDIR=%SRCDIR%\qtbase-everywhere-src-%QTVER%
 set QTBUILDDIR=%QTDIR%\build
 

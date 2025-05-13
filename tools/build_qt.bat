@@ -1,16 +1,25 @@
 @echo off
 setlocal
 
-cd %QTBUILDDIR% ||  exit /b %errorlevel%
+cd %QTBUILDDIR% ||  pause ^&^& exit /b 1
 
 echo Building Qt...
-start /W /BELOWNORMAL "Building Qt..." jom
-IF %errorlevel% NEQ 0 exit /b %errorlevel%
+call jom -j16
+IF %errorlevel% NEQ 0 (
+    pause
+    exit /b 1
+)
 
 echo Installing Qt...
-start /W /BELOWNORMAL "Installing Qt..." jom install
-IF %errorlevel% NEQ 0 exit /b %errorlevel%
+call jom -j16 install
+IF %errorlevel% NEQ 0 (
+    pause
+    exit /b 1
+)
 
 echo Qt sucessfully installed
+
+pause
+exit
 
 endlocal

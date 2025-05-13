@@ -21,33 +21,46 @@ IF exist %SSLINSTALLDIR% (
             md build
             cd build
 
-            start /W /BELOWNORMAL "Configuring OpenSSL..." perl ..\Configure VC-%SSLARCH% enable-static-engine no-shared --prefix=%SSLINSTALLDIR%
+            call perl ..\Configure VC-%SSLARCH% enable-static-engine no-shared --prefix=%SSLINSTALLDIR%
 
             echo Building / Installing OpenSSL...
-            start /W /BELOWNORMAL "Building / Installing OpenSSL..." nmake install_sw
-            IF %errorlevel% NEQ 0 exit /b %errorlevel%
+            call nmake install_sw
+            IF %errorlevel% NEQ 0 (
+                pause
+                exit /b 1
+            )
 
         ) ELSE (
 
-            start /W /BELOWNORMAL "Configuring OpenSSL 1/2..." perl Configure VC-%SSLARCH% enable-static-engine --prefix=%SSLINSTALLDIR%
-            IF %SSLARCH% == WIN32 start /W /BELOWNORMAL "Configuring OpenSSL 2/2..." ms\do_nasm ^&^& exit
-            IF %SSLARCH% == WIN64A start /W /BELOWNORMAL "Configuring OpenSSL 2/2..." ms\do_win64a ^&^& exit
+            call perl Configure VC-%SSLARCH% enable-static-engine --prefix=%SSLINSTALLDIR%
+            IF %SSLARCH% == WIN32 call ms\do_nasm
+            IF %SSLARCH% == WIN64A call ms\do_win64a
 
             echo Building OpenSSL...
-            start /W /BELOWNORMAL "Building OpenSSL..." nmake -f ms\nt.mak clean all
-            IF %errorlevel% NEQ 0 exit /b %errorlevel%
+            call nmake -f ms\nt.mak clean all
+            IF %errorlevel% NEQ 0 (
+                pause
+                exit /b 1
+            )
 
             echo Installing OpenSSL...
-            start /W /BELOWNORMAL "Installing OpenSSL..." nmake -f ms\nt.mak install
-            IF %errorlevel% NEQ 0 exit /b %errorlevel%
+            call nmake -f ms\nt.mak install
+            IF %errorlevel% NEQ 0 (
+                pause
+                exit /b 1
+            )
 
         )
 
     ) ELSE (
 
         echo Could not find OpenSSL sources in %SSLBUILDDIR%
+        pause
         exit /b 1
     )
 )
+
+pause
+exit
 
 endlocal
