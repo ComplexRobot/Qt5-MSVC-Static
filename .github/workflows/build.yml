@@ -21,7 +21,7 @@ jobs:
           ref: workflow-5.15.16
       - uses: actions/setup-python@v5
         with:
-          python-version: '2.7.18'
+          python-version: '2.7'
       - run: |
           %SET_VC_VARS%
           md C:\Qt
