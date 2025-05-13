@@ -21,13 +21,25 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: workflow-5.15.16
-      - name: Build Script
+      - name: Download Sources
         run: |
           call "%SET_VC_VARS%"
           cd "${{ github.event.repository.name }}"
           call qt download
+      - name: Build OpenSSL
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
           call qt openssl
+      - name: Configure Qt Build
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
           call qt setup
+      - name: Build Qt
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
           call qt build
       - name: 7z Compress
         id: zip
