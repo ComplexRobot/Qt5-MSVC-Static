@@ -16,17 +16,21 @@ jobs:
         shell: cmd
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           ref: workflow-5.15.16
-      - run: |
+      - name: Build Script
+        run: |
           %SET_VC_VARS%
           md C:\Qt
+          cd ${{ github.event.repository.name }}
           qt download
           qt openssl
           qt setup
           qt build
-      - id: zip
+      - name: 7z Compress
+        id: zip
         run: |
           tools\options
           7z a \
@@ -37,7 +41,8 @@ jobs:
           msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z \
           %PREFIX%\%QTVER%\
           echo "zip-file-path=%CD%\msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
-      - uses: softprops/action-gh-release@v2
+      - name: Upload Release
+        uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.zip.outputs.zip-file-path }}
           tag_name: qt5.15.16
