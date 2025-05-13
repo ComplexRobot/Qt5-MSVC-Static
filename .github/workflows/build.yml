@@ -23,17 +23,16 @@ jobs:
           ref: workflow-5.15.16
       - name: Build Script
         run: |
-          %SET_VC_VARS%
-          echo "%CD%"
-          cd "${{ github.workspace }}\${{ github.event.repository.name }}"
-          qt download
-          qt openssl
-          qt setup
-          qt build
+          call %SET_VC_VARS%
+          cd "${{ github.event.repository.name }}"
+          call qt download
+          call qt openssl
+          call qt setup
+          call qt build
       - name: 7z Compress
         id: zip
         run: |
-          tools\options
+          call "${{ github.event.repository.name }}\tools\options"
           7z a \
           -mx \
           -m0=LZMA2 \
