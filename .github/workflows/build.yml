@@ -9,7 +9,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-      SET_VC_VARS: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64"'
+      SET_VC_VARS: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64
       PREFIX: ${{ github.workspace }}\Qt
 
     defaults:
@@ -23,7 +23,7 @@ jobs:
           ref: workflow-5.15.16
       - name: Build Script
         run: |
-          call %SET_VC_VARS%
+          call "%SET_VC_VARS%"
           cd "${{ github.event.repository.name }}"
           call qt download
           call qt openssl
