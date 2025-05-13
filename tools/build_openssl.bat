@@ -56,6 +56,4 @@ IF exist %SSLINSTALLDIR% (
     )
 )
 
-exit
-
 endlocal
