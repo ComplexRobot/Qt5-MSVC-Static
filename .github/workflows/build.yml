@@ -10,6 +10,7 @@ jobs:
 
     env:
       SET_VC_VARS: C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64
+      QTVER: 5.15.16
       PREFIX: ${{ github.workspace }}\Qt
 
     defaults:
@@ -36,7 +37,7 @@ jobs:
           call "%SET_VC_VARS%"
           cd "${{ github.event.repository.name }}"
           call qt setup
-      - name: Build Qt
+      - name: Build and Install Qt
         run: |
           call "%SET_VC_VARS%"
           cd "${{ github.event.repository.name }}"
@@ -46,13 +47,12 @@ jobs:
         run: |
           call "%SET_VC_VARS%"
           call "${{ github.event.repository.name }}\tools\options"
-          7z a -mx -m0=LZMA2 -ms=on -mmt=on msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z %PREFIX%\%QTVER%\
-          echo "zip-file-name=msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
+          7z a -mx -m0=LZMA2 -ms=on -mmt=on -bsp1 qt%QTVER%-msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z %PREFIX%\%QTVER%\
+          echo "zip-file-name=qt%QTVER%-msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z" >> "%GITHUB_OUTPUT%"
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.zip.outputs.zip-file-name }}
-          tag_name: qt5.15.16
-          body: 'Statically linked Qt5.15.16'
+          tag_name: qt%QTVER%
+          body: 'Statically linked Qt%QTVER%'
           target_commitish: workflow-5.15.16
-          fail_on_unmatched_files: true
