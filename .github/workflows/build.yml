@@ -18,39 +18,41 @@ jobs:
         shell: cmd
 
     steps:
-      # - name: Checkout Repository
-      #   uses: actions/checkout@v4
-      #   with:
-      #     ref: workflow-5.15.16
-      # - name: Download Sources
-      #   run: |
-      #     call "%SET_VC_VARS%"
-      #     cd "${{ github.event.repository.name }}"
-      #     call qt download
-      # - name: Build OpenSSL
-      #   run: |
-      #     call "%SET_VC_VARS%"
-      #     cd "${{ github.event.repository.name }}"
-      #     call qt openssl
-      # - name: Configure Qt Build
-      #   run: |
-      #     call "%SET_VC_VARS%"
-      #     cd "${{ github.event.repository.name }}"
-      #     call qt setup
-      # - name: Build and Install Qt
-      #   run: |
-      #     call "%SET_VC_VARS%"
-      #     cd "${{ github.event.repository.name }}"
-      #     call qt build
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          ref: workflow-5.15.16
+      - name: Download Sources
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
+          call qt download
+      - name: Build OpenSSL
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
+          call qt openssl
+      - name: Configure Qt Build
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
+          call qt setup
+      - name: Build and Install Qt
+        run: |
+          call "%SET_VC_VARS%"
+          cd "${{ github.event.repository.name }}"
+          call qt build
       - name: 7z Compress
         id: zip
         run: |
-          echo "zip-file-name=abc123" >> "%GITHUB_OUTPUT%"
-      - run: echo ${{ steps.zip.outputs.zip-file-name }}
+          call "%SET_VC_VARS%"
+          call "${{ github.event.repository.name }}\tools\options"
+          7z a -mx -m0=LZMA2 -ms=on -mmt=on -bso1 -bsp1 -bse2 qt%QTVER%-msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z %PREFIX%\%QTVER%\
+          echo zip-file-name=qt%QTVER%-msvc%MSVCVER%-%VSCMD_ARG_TGT_ARCH%-static.7z >> "%GITHUB_OUTPUT%"
       - name: Upload Release
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ steps.zip.outputs.zip-file-name }}
           tag_name: qt%QTVER%
-          body: Statically linked Qt%QTVER%
+          body: 'Statically linked Qt%QTVER%'
           target_commitish: workflow-5.15.16
