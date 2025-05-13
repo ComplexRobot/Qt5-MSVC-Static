@@ -4,7 +4,6 @@
 set MSVCVER=2022
 set QTVER=5.15.16
 set SSLVER=1.1.1k
-set PREFIX=C:\Qt
 set EXTRABUILDOPTIONS=-qt-sqlite -c++std c++2b -pch -ltcg -qt-doubleconversion -qt-freetype -qt-harfbuzz -gui -widgets
 set PATH=%PATH%
 

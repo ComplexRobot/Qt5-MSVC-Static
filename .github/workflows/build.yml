@@ -10,6 +10,7 @@ jobs:
 
     env:
       SET_VC_VARS: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64"'
+      PREFIX: ${{ github.workspace }}\Qt
 
     defaults:
       run:
@@ -23,8 +24,7 @@ jobs:
       - name: Build Script
         run: |
           %SET_VC_VARS%
-          md C:\Qt
-          cd ${{ github.event.repository.name }}
+          cd "${{ github.event.repository.name }}"
           qt download
           qt openssl
           qt setup
@@ -48,3 +48,4 @@ jobs:
           tag_name: qt5.15.16
           body: 'Statically linked Qt5.15.16'
           target_commitish: workflow-5.15.16
+          fail_on_unmatched_files: true
