@@ -24,7 +24,8 @@ jobs:
       - name: Build Script
         run: |
           %SET_VC_VARS%
-          cd "${{ github.event.repository.name }}"
+          echo "%CD%"
+          cd "${{ github.workspace }}\${{ github.event.repository.name }}"
           qt download
           qt openssl
           qt setup
